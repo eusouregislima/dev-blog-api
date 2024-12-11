@@ -1,14 +1,32 @@
+import 'dotenv/config';
+import cors from '@fastify/cors';
+import fastifyJwt from '@fastify/jwt';
 import fastify from 'fastify';
 import { ZodError } from 'zod';
 import { prisma } from '../database/prisma';
 import { AppError } from '../errors/app-error';
+import { articlesRoutes } from './controllers/articles/route';
+import { authRoutes } from './controllers/auth/route';
 import { healthRoutes } from './controllers/health/route';
 import { userRoutes } from './controllers/users/route';
 
 export const app = fastify();
 
+app.register(fastifyJwt, {
+	secret: String(process.env.JWT_SECRET),
+	sign: {
+		expiresIn: String(process.env.JWT_EXPIRATION),
+	},
+});
+
+app.register(cors, {
+	origin: true,
+});
+
 app.register(healthRoutes);
+app.register(authRoutes);
 app.register(userRoutes);
+app.register(articlesRoutes);
 
 app.setErrorHandler((error, _, reply) => {
 	if (error instanceof ZodError) {
