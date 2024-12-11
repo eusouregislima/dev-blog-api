@@ -18,7 +18,7 @@ export const articleService = {
 			throw new BadRequestError('Article title already exists.');
 		}
 
-		return await prisma.Article.create({
+		return await prisma.article.create({
 			data,
 		});
 	},

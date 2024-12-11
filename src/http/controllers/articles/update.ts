@@ -16,7 +16,7 @@ export async function update(request: FastifyRequest, reply: FastifyReply) {
 
 	const article = await findArticleById(articleId);
 
-	const authorId = (request.user as Record<string, unknown>).id as string;
+	const authorId = (request.user as { id: string }).id;
 
 	if (article.authorId !== authorId) {
 		throw new ForbiddenError('This article is fron another author.');

@@ -17,7 +17,7 @@ export async function listMy(request: FastifyRequest, reply: FastifyReply) {
 	const pageNumber = page ?? 1;
 	const skip = (pageNumber - 1) * pageLimit;
 
-	const authorId = (request.user as Record<string, unknown>).id as string;
+	const authorId = (request.user as { id: string }).id;
 
 	const articles = await prisma.article.findMany({
 		where: {

@@ -17,7 +17,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
 	const { title, subtitle, content, tags } = data;
 
-	const authorId = (request.user as Record<string, unknown>).id as string;
+	const authorId = (request.user as { id: string }).id;
 
 	const author = await prisma.user.findUnique({
 		where: { id: authorId },

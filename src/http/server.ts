@@ -7,6 +7,7 @@ import { prisma } from '../database/prisma';
 import { AppError } from '../errors/app-error';
 import { articlesRoutes } from './controllers/articles/route';
 import { authRoutes } from './controllers/auth/route';
+import { commentRoutes } from './controllers/comments/route';
 import { healthRoutes } from './controllers/health/route';
 import { userRoutes } from './controllers/users/route';
 
@@ -27,6 +28,7 @@ app.register(healthRoutes);
 app.register(authRoutes);
 app.register(userRoutes);
 app.register(articlesRoutes);
+app.register(commentRoutes);
 
 app.setErrorHandler((error, _, reply) => {
 	if (error instanceof ZodError) {
