@@ -7,7 +7,7 @@ export const userService = {
 		password: string;
 		description?: string;
 	}) {
-		return await prisma.user.create({
+		return await prisma.User.create({
 			data,
 		});
 	},

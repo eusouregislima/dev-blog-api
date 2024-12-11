@@ -21,7 +21,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
 	const { userName, email, password, description } = data;
 
-	const userNameAlreadyExists = await prisma.user.findUnique({
+	const userNameAlreadyExists = await prisma.User.findUnique({
 		where: { userName },
 	});
 
