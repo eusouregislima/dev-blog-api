@@ -5,6 +5,8 @@ import { prisma } from '../../../database/prisma';
 import { NotFoundError } from '../../../errors/not-found-error';
 import { articleService } from '../../services/articleService';
 
+// TODO Creditar coins ao criar posts
+
 export async function create(request: FastifyRequest, reply: FastifyReply) {
 	const articleSchema = z.object({
 		title: z.string().max(255),

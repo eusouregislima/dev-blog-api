@@ -8,30 +8,33 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(cuid())
-  userName    String    @unique @db.VarChar(255)
-  email       String    @unique @db.VarChar(255)
-  password    String    @db.VarChar(255)
-  description String?
-  articles    Article[]
-  comments    Comment[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id              String            @id @default(cuid())
+  userName        String            @unique @db.VarChar(255)
+  email           String            @unique @db.VarChar(255)
+  password        String            @db.VarChar(255)
+  description     String?
+  coins           Int               @default(10)
+  articles        Article[]
+  comments        Comment[]
+  CoinTransaction CoinTransaction[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 model Article {
-  id        String    @id @default(cuid())
-  title     String    @unique @db.VarChar(255)
-  slug      String    @db.VarChar(255)
-  subtitle  String    @db.VarChar(255)
-  content   String
-  authorId  String
-  author    User      @relation(fields: [authorId], references: [id])
-  tags      String[]
-  comments  Comment[]
-  // coins       Coin[]    
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id              String            @id @default(cuid())
+  title           String            @unique @db.VarChar(255)
+  slug            String            @db.VarChar(255)
+  subtitle        String            @db.VarChar(255)
+  content         String
+  authorId        String
+  author          User              @relation(fields: [authorId], references: [id])
+  tags            String[]
+  comments        Comment[]
+  coins           Int               @default(1)
+  CoinTransaction CoinTransaction[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 model Comment {
@@ -46,4 +49,19 @@ model Comment {
   replies   Comment[] @relation("ReplyToComment")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+model CoinTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id])
+  type      CoinType
+  createdAt DateTime @default(now())
+}
+
+enum CoinType {
+  LIKE
+  DISLIKE
 }
