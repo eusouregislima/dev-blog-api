@@ -5,6 +5,8 @@ import { prisma } from '../../../database/prisma';
 import { BadRequestError } from '../../../errors/bad-request-error';
 import { userService } from '../../services/userService';
 
+// TODO adicionar o edit do description
+
 export async function create(request: FastifyRequest, reply: FastifyReply) {
 	const userSchema = z.object({
 		userName: z
@@ -21,7 +23,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 
 	const { userName, email, password, description } = data;
 
-	const userNameAlreadyExists = await prisma.User.findUnique({
+	const userNameAlreadyExists = await prisma.user.findUnique({
 		where: { userName },
 	});
 
@@ -44,7 +46,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
 		description,
 	});
 
-	createdUser.password = undefined;
+	createdUser.password = 'undefined';
 
 	return reply.status(201).send(createdUser);
 }

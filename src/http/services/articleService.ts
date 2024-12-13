@@ -18,6 +18,11 @@ export const articleService = {
 			throw new BadRequestError('Article title already exists.');
 		}
 
+		await prisma.user.update({
+			where: { id: data.authorId },
+			data: { coins: { increment: 5 } },
+		});
+
 		return await prisma.article.create({
 			data,
 		});

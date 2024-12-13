@@ -1,16 +1,23 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { z } from 'zod';
 import { getRankedArticles } from '../../services/rankingService';
 
-//TODO verificar relação entre o hanking e a paginação
-
 export async function handleGetRankedArticles(
-	_: FastifyRequest,
+	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
+	const querySchema = z.object({
+		page: z.coerce.number().positive().optional(),
+	});
+
+	const { page } = querySchema.parse(request.query);
+
 	try {
-		const articles = await getRankedArticles();
+		const articles = await getRankedArticles(page);
 		reply.status(200).send(articles);
 	} catch (error) {
-		reply.status(500).send({ error });
+		const errorMessage =
+			error instanceof Error ? error.message : 'Erro desconhecido';
+		reply.status(500).send({ error: errorMessage });
 	}
 }

@@ -30,6 +30,8 @@ export async function list(request: FastifyRequest, reply: FastifyReply) {
 			subtitle: true,
 			tags: true,
 			createdAt: true,
+			coins: true,
+			isSponsored: true,
 			author: {
 				select: {
 					id: true,

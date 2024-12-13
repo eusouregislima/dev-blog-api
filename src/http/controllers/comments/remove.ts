@@ -4,8 +4,6 @@ import { prisma } from '../../../database/prisma';
 import { ForbiddenError } from '../../../errors/forbidden-error';
 import { NotFoundError } from '../../../errors/not-found-error';
 
-// TODO Colocar para o dono da postagem poder apagar qualquer comentário
-
 export async function removeComment(
 	request: FastifyRequest,
 	reply: FastifyReply,
@@ -18,7 +16,7 @@ export async function removeComment(
 
 	const comment = await prisma.comment.findUnique({
 		where: { id: commentId },
-		include: { replies: true },
+		include: { article: true },
 	});
 
 	if (!comment) {
@@ -27,7 +25,10 @@ export async function removeComment(
 
 	const userId = (request.user as { id: string }).id;
 
-	if (comment.authorId !== userId) {
+	const isAuthorComment = comment.authorId === userId;
+	const isArticleOwner = comment.article?.authorId === userId;
+
+	if (!isAuthorComment && !isArticleOwner) {
 		throw new ForbiddenError('You are not the author of this comment');
 	}
 
@@ -36,13 +37,11 @@ export async function removeComment(
 			where: { id: commentId },
 		});
 
-		return reply
-			.status(200)
-			.send({ message: 'Comentário apagado com sucesso' });
+		return reply.status(200).send({ message: 'Comment successfully deleted' });
 	} catch (error) {
 		console.log(error);
 		return reply
 			.status(500)
-			.send({ error: 'Ops, algo deu errado, tente novamente mais tarde...' });
+			.send({ error: 'Oops, something went wrong, try again later...' });
 	}
 }
