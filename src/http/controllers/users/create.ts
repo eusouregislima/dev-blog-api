@@ -5,8 +5,6 @@ import { prisma } from '../../../database/prisma';
 import { BadRequestError } from '../../../errors/bad-request-error';
 import { userService } from '../../services/userService';
 
-// TODO adicionar o edit do description
-
 export async function create(request: FastifyRequest, reply: FastifyReply) {
 	const userSchema = z.object({
 		userName: z
